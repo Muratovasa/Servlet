@@ -16,6 +16,8 @@ logs/
 HELP.md
 .gradle
 build/
+/target/
+*.MF
 
 ### STS ###
 .apt_generated
