@@ -1,5 +1,8 @@
 package ru.netology.servlet;
 
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import ru.netology.controller.PostController;
 import ru.netology.exception.NotFoundException;
 import ru.netology.repository.PostRepository;
@@ -19,10 +22,18 @@ public class MainServlet extends HttpServlet {
 
   @Override
   public void init() {
-    final var repository = new PostRepository();
-    final var service = new PostService(repository);
-    controller = new PostController(service);
+      final var context = new AnnotationConfigApplicationContext("ru.netology");
+
+      // получаем по имени бина
+      final var controller = context.getBean("postController");
+
+      // получаем по классу бина
+      final var service = context.getBean(PostService.class);
+
+      // по умолчанию создаётся лишь один объект на BeanDefinition
+      final var isSame = service == context.getBean("postService");
   }
+
 
   @Override
   protected void service(HttpServletRequest req, HttpServletResponse resp) throws IOException {
